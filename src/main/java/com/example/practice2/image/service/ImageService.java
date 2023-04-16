@@ -43,11 +43,19 @@ public class ImageService {
             // 이미지 업로드
             byte[] content = file.getBytes();
             String bucketName = "spring_practice";
-            BlobId blobId = BlobId.of(bucketName, storeFileName);
-            BlobInfo blobInfo = BlobInfo.newBuilder(blobId)
-                    .setContentType(file.getContentType())
-                    .build();
-            storage.create(blobInfo, content);
+            //BlobId blobId = BlobId.of(bucketName, storeFileName);
+
+            BlobInfo blobInfo = storage.create(
+                    BlobInfo.newBuilder(bucketName, storeFileName)
+                            .setContentType(file.getContentType())
+                            .build(),
+                    file.getInputStream()
+            );
+
+//            BlobInfo blobInfo = BlobInfo.newBuilder(bucketName, storeFileName)
+//                    .setContentType(file.getContentType())
+//                    .build();
+//            storage.create(blobInfo, file.getInputStream());
 
             return Image.builder()
                     .originalName(originalName)
