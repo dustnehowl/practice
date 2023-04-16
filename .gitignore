@@ -7,6 +7,8 @@ build/
 
 ### application.yaml
 application.yaml
+### 서비스 계정
+friendly-legacy-382417-e94d73d0b2f1.json
 
 ### STS ###
 .apt_generated
