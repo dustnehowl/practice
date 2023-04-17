@@ -1,5 +1,7 @@
 package com.example.practice2.image.service;
 
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.example.practice2.image.Image;
 import com.example.practice2.image.controller.dto.ImageResponse;
 import com.example.practice2.image.controller.dto.UploadImageRequest;
@@ -30,45 +32,9 @@ import static com.google.common.base.Charsets.UTF_8;
 public class ImageService {
     private final ImageRepository imageRepository;
     private final MemberRepository memberRepository;
-    @Autowired
-    private Storage storage;
-
-    @Transactional
-    public ImageResponse uploadImage(UploadImageRequest uploadImageRequest) {
-        Member uploader = findMemberById(uploadImageRequest.getMemberId());
-        MultipartFile file = uploadImageRequest.getImage();
-        Image image = uploadFileToGcs(file, uploader);
-        imageRepository.save(image);
-        return ImageResponse.from(image);
-    }
-
-    private Image uploadFileToGcs(MultipartFile file, Member uploader){
-        try{
-            String originalName = file.getOriginalFilename();
-            String storeFileName = createStoreFileName(originalName);
-
-            // 이미지 업로드
-            byte[] content = file.getBytes();
-            String bucketName = "spring_practice";
-            BlobId blobId = BlobId.of(bucketName, storeFileName);
-
-            storage.create(
-                    BlobInfo.newBuilder(bucketName, storeFileName)
-                            .setContentType(file.getContentType())
-                            .build(),
-                    content
-            );
-
-            return Image.builder()
-                    .originalName(originalName)
-                    .storeFileName(storeFileName)
-                    .uploader(uploader)
-                    .build();
-        }
-        catch (Exception e){
-            throw new RuntimeException("이미지 업로드에 실패했습니다.");
-        }
-    }
+    private final AmazonS3Client amazonS3Client;
+    @Value("${spring.cloud.aws.s3.bucket}")
+    private String bucket;
 
     private Member findMemberById(long memberId) {
         Member member = memberRepository.findMemberById(memberId).orElseThrow(() -> new RuntimeException());
@@ -90,5 +56,35 @@ public class ImageService {
         Member uploader = findMemberById(uploaderId);
         List<Image> images = imageRepository.findImagesByUploader(uploader);
         return ImageResponse.of(images);
+    }
+
+    @Transactional
+    public ImageResponse uploadImageS3(UploadImageRequest uploadImageRequest) {
+        Member uploader = findMemberById(uploadImageRequest.getMemberId());
+        MultipartFile file = uploadImageRequest.getImage();
+        Image image = uploadFileToS3(file, uploader);
+        imageRepository.save(image);
+        return ImageResponse.from(image);
+    }
+
+    private Image uploadFileToS3(MultipartFile file, Member uploader){
+        try{
+            String originalName = file.getOriginalFilename();
+            String storeFileName = createStoreFileName(originalName);
+
+            ObjectMetadata metadata= new ObjectMetadata();
+            metadata.setContentType(file.getContentType());
+            metadata.setContentLength(file.getSize());
+            amazonS3Client.putObject(bucket,storeFileName,file.getInputStream(),metadata);
+
+            return Image.builder()
+                    .originalName(originalName)
+                    .storeFileName(storeFileName)
+                    .uploader(uploader)
+                    .build();
+        }
+        catch (Exception e){
+            throw new RuntimeException("이미지 업로드에 실패했습니다.");
+        }
     }
 }

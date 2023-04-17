@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ImageController {
     private final ImageService imageService;
-
-    @PostMapping("/upload")
-    public ResponseEntity uploadImage(@ModelAttribute UploadImageRequest uploadImageRequest){
-        return ResponseEntity.ok().body(imageService.uploadImage(uploadImageRequest));
+    @PostMapping("uploadS3")
+    public ResponseEntity uploadImageS3(@ModelAttribute UploadImageRequest uploadImageRequest){
+        return ResponseEntity.ok().body(imageService.uploadImageS3(uploadImageRequest));
     }
+
     @GetMapping("/test")
     public String test(){
         return "Hello!";

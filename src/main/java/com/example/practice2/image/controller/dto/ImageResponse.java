@@ -20,7 +20,7 @@ public class ImageResponse {
         this.originalName = originalName;
         this.uploader = uploader;
         this.uploadTime = uploadTime;
-        this.publicUrl = "https://storage.googleapis.com/spring_practice/" + storeFileName;
+        this.publicUrl = "https://slowybucket.s3.ap-northeast-2.amazonaws.com/" + storeFileName;
     }
     public static ImageResponse from(Image image) {
         return new ImageResponse(
