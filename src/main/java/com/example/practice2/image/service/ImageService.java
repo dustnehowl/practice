@@ -6,10 +6,14 @@ import com.example.practice2.image.controller.dto.UploadImageRequest;
 import com.example.practice2.image.repository.ImageRepository;
 import com.example.practice2.member.Member;
 import com.example.practice2.member.repository.MemberRepository;
+import com.fasterxml.jackson.core.json.UTF8StreamJsonParser;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
+import com.google.common.base.Charsets;
+import com.google.common.base.Utf8;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,12 +23,15 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import static com.google.common.base.Charsets.UTF_8;
+
 @Service
 @RequiredArgsConstructor
 public class ImageService {
     private final ImageRepository imageRepository;
     private final MemberRepository memberRepository;
-    private final Storage storage;
+    @Autowired
+    private Storage storage;
 
     @Transactional
     public ImageResponse uploadImage(UploadImageRequest uploadImageRequest) {
@@ -43,19 +50,14 @@ public class ImageService {
             // 이미지 업로드
             byte[] content = file.getBytes();
             String bucketName = "spring_practice";
-            //BlobId blobId = BlobId.of(bucketName, storeFileName);
+            BlobId blobId = BlobId.of(bucketName, storeFileName);
 
-            BlobInfo blobInfo = storage.create(
+            storage.create(
                     BlobInfo.newBuilder(bucketName, storeFileName)
                             .setContentType(file.getContentType())
                             .build(),
-                    file.getInputStream()
+                    content
             );
-
-//            BlobInfo blobInfo = BlobInfo.newBuilder(bucketName, storeFileName)
-//                    .setContentType(file.getContentType())
-//                    .build();
-//            storage.create(blobInfo, file.getInputStream());
 
             return Image.builder()
                     .originalName(originalName)

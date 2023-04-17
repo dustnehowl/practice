@@ -16,6 +16,10 @@ public class ImageController {
     public ResponseEntity uploadImage(@ModelAttribute UploadImageRequest uploadImageRequest){
         return ResponseEntity.ok().body(imageService.uploadImage(uploadImageRequest));
     }
+    @GetMapping("/test")
+    public String test(){
+        return "Hello!";
+    }
 
     @GetMapping("/getImages")
     public ResponseEntity getImagesByUploader(@RequestParam long uploaderId){
