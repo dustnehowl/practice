@@ -33,7 +33,7 @@ public class ImageService {
     private final ImageRepository imageRepository;
     private final MemberRepository memberRepository;
     private final AmazonS3Client amazonS3Client;
-    @Value("${spring.cloud.aws.s3.bucket}")
+    @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
     private Member findMemberById(long memberId) {
