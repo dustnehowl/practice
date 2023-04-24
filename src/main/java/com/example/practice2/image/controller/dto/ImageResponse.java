@@ -26,7 +26,7 @@ public class ImageResponse {
         return new ImageResponse(
                 image.getId(),
                 image.getOriginalName(),
-                image.getUploader().getName(),
+                image.getUploader().getNickName(),
                 image.getUploadTime(),
                 image.getStoreFileName()
         );

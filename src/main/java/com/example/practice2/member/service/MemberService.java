@@ -39,10 +39,6 @@ public class MemberService {
     public List<MemberResponse> getAll() {
         return MemberResponse.of(memberRepository.findAll());
     }
-
-    private void findMemberByNameAndAge(String name, int age){
-        memberRepository.findMemberByNameAndAge(name, age).ifPresent(member -> {throw new RuntimeException("이미 존재하는 회원입니다.");});
-    }
     private void findMemberByLoginId(String loginId){
         memberRepository.findMemberByLoginId(loginId).ifPresent(member -> {throw new RuntimeException("이미 존재하는 회원입니다.");});
     }

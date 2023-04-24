@@ -10,7 +10,6 @@ import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findMemberById(long memberId);
-    Optional<Member> findMemberByNameAndAge(String name, int age);
     Optional<Member> findMemberByLoginId(String loginID);
     @Query("SELECT m FROM Member m WHERE m.nickName LIKE %:keyword%")
     List<Member> findByKeyword(@Param("keyword") String keyword);
