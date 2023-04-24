@@ -11,22 +11,22 @@ import java.util.stream.Collectors;
 @Data
 public class MemberResponse implements Serializable {
     private long memberId;
-    private String name;
-    private int age;
+    private String loginId;
+    private String nickName;
 
     public MemberResponse() {}
     @Builder
-    public MemberResponse(long memberId, String name, int age){
+    public MemberResponse(long memberId, String loginId, String nickName){
         this.memberId = memberId;
-        this.name = name;
-        this.age = age;
+        this.loginId = loginId;
+        this.nickName = nickName;
     }
 
     public static MemberResponse from(Member member){
         return MemberResponse.builder()
                 .memberId(member.getId())
-                .name(member.getName())
-                .age(member.getAge())
+                .loginId(member.getLoginId())
+                .nickName(member.getNickName())
                 .build();
     }
     public static List<MemberResponse> of(List<Member> members){

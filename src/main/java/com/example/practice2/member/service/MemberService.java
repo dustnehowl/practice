@@ -11,8 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,9 +18,9 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public MemberResponse regist(MemberRegistRequest memberRegistRequest) {
-        findMemberByNameAndAge(memberRegistRequest.getName(), memberRegistRequest.getAge());
-        Member member = new Member(memberRegistRequest.getName(), memberRegistRequest.getAge());
+    public MemberResponse signUp(MemberRegistRequest memberRegistRequest) {
+        findMemberByLoginId(memberRegistRequest.getLoginId());
+        Member member = new Member(memberRegistRequest.getLoginId(), memberRegistRequest.getNickName(), memberRegistRequest.getPassword());
         memberRepository.save(member);
         return MemberResponse.from(member);
     }
@@ -44,6 +42,9 @@ public class MemberService {
 
     private void findMemberByNameAndAge(String name, int age){
         memberRepository.findMemberByNameAndAge(name, age).ifPresent(member -> {throw new RuntimeException("이미 존재하는 회원입니다.");});
+    }
+    private void findMemberByLoginId(String loginId){
+        memberRepository.findMemberByLoginId(loginId).ifPresent(member -> {throw new RuntimeException("이미 존재하는 회원입니다.");});
     }
     private Member findMemberById(Long memberId){
         return memberRepository.findMemberById(memberId).orElseThrow(() -> new RuntimeException());

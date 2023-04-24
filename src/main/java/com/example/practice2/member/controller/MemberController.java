@@ -7,14 +7,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/member")
+@RequestMapping("/members")
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
 
-    @PostMapping("/regist")
-    public ResponseEntity regist(@RequestBody MemberRegistRequest memberRegistRequest){
-        return ResponseEntity.ok().body(memberService.regist(memberRegistRequest));
+    @PostMapping("/signUp")
+    public ResponseEntity signUp(@RequestBody MemberRegistRequest memberRegistRequest){
+        return ResponseEntity.ok().body(memberService.signUp(memberRegistRequest));
     }
     @GetMapping("/{memberId}")
     public ResponseEntity getMember(@PathVariable Long memberId){

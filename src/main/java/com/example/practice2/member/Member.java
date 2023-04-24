@@ -11,13 +11,15 @@ public class Member {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MEMBER_ID")
     private long id;
-    private String name;
-    private int age;
+    private String loginId;
+    private String nickName;
+    private String password;
 
     @Builder
-    public Member(String name, int age) {
-        this.name = name;
-        this.age = age;
+    public Member(String loginId, String nickName, String password) {
+        this.loginId = loginId;
+        this.nickName = nickName;
+        this.password = password;
     }
 
     public Member(){}
