@@ -4,15 +4,17 @@ import com.example.practice2.member.Member;
 import lombok.Builder;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
-public class MemberResponse {
+public class MemberResponse implements Serializable {
     private long memberId;
     private String name;
     private int age;
 
+    public MemberResponse() {}
     @Builder
     public MemberResponse(long memberId, String name, int age){
         this.memberId = memberId;

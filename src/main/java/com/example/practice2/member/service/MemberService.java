@@ -5,6 +5,8 @@ import com.example.practice2.member.controller.dto.MemberRegistRequest;
 import com.example.practice2.member.controller.dto.MemberResponse;
 import com.example.practice2.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,9 +26,20 @@ public class MemberService {
         memberRepository.save(member);
         return MemberResponse.from(member);
     }
+    @Transactional
+    @CacheEvict(value = "Member", key = "#memberId", cacheManager = "testCacheManager")
+    public void deleteMember(Long memberId){
+        Member member = findMemberById(memberId);
+        memberRepository.delete(member);
+    }
 
+    @Cacheable(value = "Member", key = "#memberId", cacheManager = "testCacheManager")
     public MemberResponse getMember(Long memberId) {
         return MemberResponse.from(findMemberById(memberId));
+    }
+    @Cacheable(value = "Member", cacheManager = "testCacheManager")
+    public List<MemberResponse> getAll() {
+        return MemberResponse.of(memberRepository.findAll());
     }
 
     private void findMemberByNameAndAge(String name, int age){

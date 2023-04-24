@@ -20,9 +20,12 @@ public class MemberController {
     public ResponseEntity getMember(@PathVariable Long memberId){
         return ResponseEntity.ok().body(memberService.getMember(memberId));
     }
-
     @GetMapping("/search")
     public ResponseEntity searchMembers(@RequestParam String keyword){
         return ResponseEntity.ok().body(memberService.findByKeyword(keyword));
+    }
+    @GetMapping("/all")
+    public ResponseEntity getAll(){
+        return ResponseEntity.ok().body(memberService.getAll());
     }
 }
