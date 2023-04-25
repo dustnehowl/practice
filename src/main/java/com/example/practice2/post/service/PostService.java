@@ -1,5 +1,6 @@
 package com.example.practice2.post.service;
 
+import com.example.practice2.comment.controller.dto.CommentResponse;
 import com.example.practice2.image.PostImage;
 import com.example.practice2.image.controller.dto.PostImageResponse;
 import com.example.practice2.image.service.ImageService;
@@ -49,6 +50,7 @@ public class PostService {
         List<Post> posts = postRepository.findAll();
         return PostResponse.of(posts);
     }
+
 
     private Member findMemberById(Long memberId){
         return memberRepository.findMemberById(memberId).orElseThrow(() -> new RuntimeException());
