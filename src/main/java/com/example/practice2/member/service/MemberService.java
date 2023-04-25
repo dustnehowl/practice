@@ -25,17 +25,17 @@ public class MemberService {
         return MemberResponse.from(member);
     }
     @Transactional
-    //@CacheEvict(value = "Member", key = "#memberId", cacheManager = "testCacheManager")
+    @CacheEvict(value = "Member", key = "#memberId", cacheManager = "testCacheManager")
     public void deleteMember(Long memberId){
         Member member = findMemberById(memberId);
         memberRepository.delete(member);
     }
 
-    //@Cacheable(value = "Member", key = "#memberId", cacheManager = "testCacheManager")
+    @Cacheable(value = "Member", key = "#memberId", cacheManager = "testCacheManager")
     public MemberResponse getMember(Long memberId) {
         return MemberResponse.from(findMemberById(memberId));
     }
-    //@Cacheable(value = "Member", cacheManager = "testCacheManager")
+    @Cacheable(value = "Member", cacheManager = "testCacheManager")
     public List<MemberResponse> getAll() {
         return MemberResponse.of(memberRepository.findAll());
     }
