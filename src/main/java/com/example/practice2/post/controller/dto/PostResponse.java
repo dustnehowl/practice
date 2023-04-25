@@ -13,18 +13,21 @@ import java.util.stream.Collectors;
 @Data
 public class PostResponse {
     private Long postId;
+    private String uploader;
     private LocalDateTime uploadTime;
     private String imageUrl;
 
     @Builder
-    public PostResponse(Long postId, LocalDateTime uploadTime, String imageUrl){
+    public PostResponse(Long postId, String uploader, LocalDateTime uploadTime, String imageUrl){
         this.postId = postId;
+        this.uploader = uploader;
         this.uploadTime =uploadTime;
         this.imageUrl = "https://slowybucket.s3.ap-northeast-2.amazonaws.com/" + imageUrl;
     }
     public static PostResponse from(Post post){
         return PostResponse.builder()
                 .postId(post.getId())
+                .uploader(post.getUploader().getNickName())
                 .uploadTime(post.getUploadTime())
                 .imageUrl(post.getPostImage().getStoreFileName())
                 .build();
