@@ -16,6 +16,9 @@ services:
     image: redis
     container_name: redis
     command: redis-server --port 6379
-    hostname: redis
+    volumes:
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf
+      - ./redis/data:/data
+    command: redis-server /usr/local/etc/redis/redis.conf
     ports:
       - 6379:6379
