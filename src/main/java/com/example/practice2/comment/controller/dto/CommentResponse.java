@@ -10,16 +10,18 @@ import java.util.stream.Collectors;
 @Data
 public class CommentResponse {
     private Long commentId;
+    private Long postId;
     private String commenter;
     private LocalDateTime commentTime;
-    private Long postId;
+    private String comment;
     private Integer numLike;
 
-    public  CommentResponse(Long commentId, Boolean isAnonymous, String commenter, LocalDateTime commentTime, Long postId, Integer numLike){
+    public  CommentResponse(Long commentId, Boolean isAnonymous, String commenter, LocalDateTime commentTime, String comment, Long postId, Integer numLike){
         this.commentId = commentId;
         if(isAnonymous == true) this.commenter = "Anonymous";
         else this.commenter = commenter;
         this.commentTime = commentTime;
+        this.comment = comment;
         this.postId = postId;
         this.numLike = numLike;
     }
@@ -29,6 +31,7 @@ public class CommentResponse {
                 comment.getIsAnonymous(),
                 comment.getCommenter().getNickName(),
                 comment.getCommentTime(),
+                comment.getComment(),
                 comment.getPost().getId(),
                 comment.getNumLike()
         );
