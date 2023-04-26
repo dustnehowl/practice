@@ -13,7 +13,7 @@ services:
       - redis
 
   redis:
-    image: redis:alpine
+    image: redis
     container_name: redis_boot
     command: redis-server --port 6379
     hostname: redis
